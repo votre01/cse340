@@ -1,6 +1,230 @@
+
+:root {
+  --primary-color: rgb(59, 75, 75);
+  --secondary-color: rgb(92, 135, 255);
+  --accent-color1: #fff;
+  --accent-color2: rgb(221, 150, 44);
+  --accent-color3: rgb(56, 56, 56);
+
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--accent-color3);
+  margin: 0;
+}
+
 /******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+/****** Header styling *****************/
+
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem .4rem;
+  margin: 0;
+}
+
+#top-header .siteName a {
+  text-decoration: none;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+#top-header #tools a {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: .7rem;
+  font-weight: 100;
+  color: var(--accent-color2);
+}
+
+/****** Navigation styling *****************/
+nav ul li {
+  list-style: none;
+  padding-left: 0;
+  font-size: .8rem;
+}
+
+nav ul {
+  /* padding-left: 0; */
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  padding: 1rem 1rem;
+  background-color: var(--primary-color);
+  /* background-color: var(--accent-color2); */
+  font-weight: 700;
+  color: var(--accent-color1);
+  margin: 0;
+}
+
+/****** Main content styling ******/
+.main-content {
+  padding: .6rem;
+}
+
+/****** Vehicle summary ***********/
+.vehicle-summary {
+  position: relative;
+  margin-bottom: 14rem;
+  color: var(--primary-color);   
+}
+
+.vehicle-summary img {
+  float: right;
+}
+
+.vehicle-summary aside {
+  position: absolute;
+  padding: .2rem;
+  top: 160%;
+  color: var(--accent-color2); 
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.vehicle-summary aside h2 {
+  font-size: 1rem;
+}
+
+.vehicle-summary aside ul {
+  padding-left: 0;
+  list-style: none;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.vehicle-summary aside img {
+  max-width: 120px;
+  padding-left: 0;
+  list-style: none;
+}
+
+/****** Vehicle upgrages styling *****************/
+.vehicle-upgrades {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  align-content: center;
+}
+
+.vehicle-upgrades .upgrade {
+  padding: .4rem;
+  padding-bottom: 2rem;  
+  text-align: center;
+}
+
+.vehicle-upgrades .upgrade div {
+  text-align: center;
+  height: 90%;  
+  background-color: var(--secondary-color);
+  border: 1px solid var(--primary-color);
+}
+
+.vehicle-upgrades h2 {
+  grid-column: 1/3;
+}
+
+.vehicle-upgrades .upgrade div img {
+  padding-top: .4rem;
+}
+
+/***** Vehicle article styling *******/
+.vehicle-article {
+  clear: both;
+}
+
+.vehicle-article .vehicle-reviews {
+  line-height: 2rem;
+  font-size: .9rem;
+}
+
+.vehicle-article .vehicle-reviews ul {
+  padding-left: 1rem;
+}
+
+/****** Footer styling **********/
+footer {
+  padding: .4rem .6rem;
+}
+
+/***********************************
+ * Desktop view                
+ ***********************************/
+
+@media screen and (min-width: 600px) {
+
+  /******* Checker background *******/
+  html {
+    background-image: url("../images/site/small_check.jpg");
+  }
+
+  /******* Body reset ********/
+  body {
+    max-width: 768px;
+    background-color: var(--accent-color1);
+    margin: 1rem auto;
+    border: 4px solid var(--secondary-color);
+    border-radius: 1rem;
+  }
+
+  /****** Header styling *******/
+  #top-header #tools a {
+    font-size: .9rem;
+  }
+
+  /****** Nav styling **********/
+  nav ul {
+    padding: 1rem 6rem;
+  }
+
+  /****** Vehicle summary styling *****/
+  .vehicle-summary {
+    margin-bottom: 2rem;
+  }
+  .vehicle-summary img {
+    float: none;
+    margin-left: 12%;
+  }
+
+  .vehicle-summary aside {
+    left: 5%;
+    top: 30%;
+  }
+
+  .vehicle-summary aside h2 {
+    margin: 0;
+    padding: .2rem 0;
+  }
+  
+  .vehicle-summary aside ul {
+    font-size: 1.2rem;
+    margin-top: 0;
+    line-height: 1.4rem;
+  }
+  
+  .vehicle-summary aside img {
+    max-width: 140px;
+    float: left;
+  }
+
+  /******* Vehicle article styling ******/
+  .vehicle-article {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* max-width: 100%; */
+  }
+
+  .vehicle-article .vehicle-reviews {
+    order: 2;
+    font-size: 1rem;
+    padding-left: 1rem;
+  }
 }
