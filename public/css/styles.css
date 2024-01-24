@@ -20,6 +20,10 @@ body {
   box-sizing: border-box;
 }
 
+main {
+  padding: .6rem;
+}
+
 /****** Header styling *****************/
 
 #top-header {
@@ -50,6 +54,16 @@ nav ul li {
   list-style: none;
   padding-left: 0;
   font-size: .8rem;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: var(--accent-color1);
+}
+
+nav ul li a:hover {
+  text-decoration: none;
+  color: var(--accent-color2);
 }
 
 nav ul {
@@ -148,6 +162,39 @@ nav ul {
 .vehicle-article .vehicle-reviews ul {
   padding-left: 1rem;
 }
+
+/****** Classifictaion grid display *******/
+main ul {
+  padding-left: 0;
+
+}
+
+#inv-display {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  gap: .6rem;
+}
+
+#inv-display li {
+  list-style: none;  
+  max-width: 200px;
+  padding: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: .2rem;
+}
+
+#inv-display li img {
+  max-width: 100%;
+}
+
+#inv-display li h2 a {
+  text-decoration: none;
+  font-size: 1.2rem;
+  color: var(--accent-color2);
+}
+
+
 
 /****** Footer styling **********/
 footer {
