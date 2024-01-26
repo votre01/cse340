@@ -30,9 +30,15 @@ app.use(static)
 app.get("/", utilities.handleErrors(baseController.buildHome))
 
 // Inventory routes
-app.use("/inv", inventoryRoute)
+app.use("/inv", utilities.handleErrors(inventoryRoute))
 
-// File not found route
+// Footer error link route
+app.use("/inv/footer", utilities.handleErrors(inventoryRoute.buildByInventoryId))
+
+
+/***************************
+*File not found route
+****************************/
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
