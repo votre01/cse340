@@ -168,7 +168,6 @@ nav ul {
 /****** Classifictaion grid display *******/
 main ul {
   padding-left: 0;
-
 }
 
 #inv-display {
@@ -216,9 +215,83 @@ main ul {
   padding: .4rem;
 }
 
+/****** Account form **********/ 
+form {
+  border: 2px solid var(--primary-color);
+  border-radius: .2rem;
+  background-color: var(--primary-color);
+}
+
+label {
+  color: var(--accent-color1);
+}
+
+input[type=email], input[type=text], input[type=password], input[type=number], textarea, select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: none;
+  border-radius: .2rem;
+  box-sizing: border-box;
+  font-size: 1rem;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+button {
+  background-color: var(--accent-color2);
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: .2rem
+}
+
+.account-form {
+  padding: 24px;
+}
+
+span.psw {
+  color: var(--accent-color1);
+  float: right;
+  padding: 24px;
+  font-size: 1.4rem;
+}
+
+span.psw a {
+  color: var(--accent-color2);
+}
+
+.note {
+  font-size: .8rem;
+  color: var(--secondary-color);
+  padding: 1rem;
+  
+}
+
+.note ul {
+  list-style: none;
+  margin: 0;
+}
+
+input:focus:invalid {
+  background-color: pink;
+  border: 1px solid var(--primary-color) ;
+}
+
+input:focus:valid {
+  background-color: rgb(182, 221, 206);
+  border: 1px solid var(--primary-color) ;
+}
+
+.notice {
+  color: red;
+  padding-left: 1rem;
+}
 
 
-/****** Footer styling **********/
 footer {
   padding: .4rem .6rem;
 }
@@ -304,5 +377,14 @@ footer {
   #detail-display {
     display: grid;
     grid-template-columns: 1fr 1fr;
+  }
+
+  form {
+    width: 60%;
+    margin: 0 auto;
+  }
+
+  .notice {
+    padding-left: 4rem;
   }
 }

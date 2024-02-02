@@ -1,0 +1,73 @@
+<!-- The content heading -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else {
+    res.redirect('/')
+} %>
+    
+<!-- Message block -->
+<%- messages() %>
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+<!-- The register form displays here  -->
+<form id="addInventoryForm" action="/inv/addinventory" method="post">
+
+    <p class="note">All the inputs are required!</p>
+
+    <div class="account-form">
+      <label for="classification">Classification</label>
+      <%- classificationOptions %>
+
+      <label for="inv_make">Make</label>
+      <input type="text" placeholder="Min of 3 characters" name="inv_make" id="invMake" required value="<%= locals.inv_make%>">
+
+      <label for="inv_model">Model</label>
+      <input type="text" placeholder="Min of 3 characters" name="inv_model" id="invModel" required value="<%= locals.inv_model%>">
+
+      <label for="inv_description">Description</label>
+      <textarea name="inv_description" id="invDescription" rows="4" cols="50" required><%= locals.inv_description%></textarea>
+
+      <label for="inv_image">Image Path</label>
+      <input type="text" value="/images/vehicles/no-image.png" name="inv_image" id="invImage" required value="<%= locals.inv_image%>">
+
+      <label for="inv_thumbnail">Thumbnail Path</label>
+      <input type="text" value="/images/vehicles/no-image-tn.png" name="inv_thumbnail" id="invThumbnail" required value="<%= locals.inv_thumbnail%>">
+
+      <label for="inv_price">Price</label>
+      <input type="number" step="any" placeholder="Decimal or integer" name="inv_price" id="invPrice" required value="<%= locals.inv_price%>">
+
+      <label for="inv_year">Year</label>
+      <input type="number" placeholder="4-digit year" name="inv_year" id="invYear" required pattern="/^[1-9][0-9]{3}?)$/gm" value="<%= locals.inv_year%>">
+
+      <label for="inv_miles">Miles</label>
+      <input type="number" placeholder="Digits only" name="inv_miles" id="invMiles" pattern="/^\d+$/" required value="<%= locals.inv_miles%>">
+
+      <label for="inv_color">Color</label>
+      <input type="text" placeholder="Min of 3 characters" name="inv_color" id="invColor" required value="<%= locals.inv_color%>">
+
+      <span class="note">
+        <i>Name must be alphabectic characters only.</i>
+      </span>
+  
+      <button type="submit">Add Inventory</button>
+    </div>
+</form>
+
+<script>
+  // Debugging classification_id on select block
+  const selectElement = document.querySelector('select')
+  const optionElement = document.querySelector('option')
+  console.log(selectElement.value)
+  console.log(optionElement.value)
+
+  selectElement.addEventListener('change', function() {
+  console.log(selectElement.value)
+});
+</script>

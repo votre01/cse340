@@ -1,0 +1,33 @@
+<!-- The content heading -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } else {
+    res.redirect('/')
+} %>
+    
+<!-- Message block -->
+<%# messages() %>
+
+<% if (errors) { %>
+    <ul class="notice">
+   <% errors.array().forEach(error => { %>
+     <li><%= error.msg %></li>
+  <%  }) %>
+   </ul>
+  <% } %>
+
+<!-- The register form displays here  -->
+<form id="addClassificationForm" action="/inv/newclassification" method="post">
+
+    <p class="note">All the inputs are required!</p>
+
+    <div class="account-form">
+      <label for="classification_name">Classification name</label>
+      <input type="text" placeholder="Enter classification" name="classification_name" id="classificationName" required value="<%= locals.classification_name%>">
+
+      <span class="note">
+        <i>Name must be alphabectic characters only.</i>
+      </span>
+  
+      <button type="submit">Add Classification</button>
+    </div>
