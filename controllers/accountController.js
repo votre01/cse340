@@ -1,6 +1,8 @@
 const utilities = require("../utilities")
 const accountModel = require("../models/account-model")
 const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 
 
 /* ****************************************
@@ -74,4 +76,51 @@ async function registerAccount(req, res) {
     }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount }
+/* ****************************************
+ *  Process login request
+ * ************************************ */
+async function accountLogin(req, res) {
+    let nav = await utilities.getNav()
+    const {account_email, account_password} = req.body
+    const accountData = await accountModel.getAccountByEmail(account_email)
+    if (!accountData) {
+        req.flash("notice", "Please check you credentials and try again")
+        res.status(400).render("account/login", {
+            title: "Login",
+            nav,
+            errors: null,
+            account_email,
+        })
+        return
+    }
+    try {
+        if (await bcrypt.compare(account_password, accountData.account_password)) {
+            delete accountData.account_password
+            const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, {expiresIn: 3600 * 1000})
+            res.cookie("jwt", accessToken, {httpOnly: true, maxAge: 3600 * 1000})
+            return res.redirect("/account/")
+        }
+    } catch (error) {
+        return new Error('Access Forbidden')
+    }
+}
+
+async function buildAccountManagement(req, res)  {
+    let nav = await utilities.getNav()
+    req.flash("Login success")
+    res.render("account/account-management", {
+        title: "Account",
+        nav,            
+        errors: null,
+        accountLogin: "You're logged in",
+    })
+}
+
+// Process logout account
+async function accountLogout(req, res) {
+    res.clearCookie("jwt"); // Clear the 'jwt' cookie
+    res.redirect("/account"); // Redirect to the login page
+};
+
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, accountLogout }

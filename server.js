@@ -17,6 +17,8 @@ const utilities = require("./utilities")
 const session = require("express-session")
 const pool = require('./database')
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
+const router = require("./routes/inventoryRoute")
 
 
 /* ***********************
@@ -52,6 +54,12 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true})) // for parsing application/x-www-form-urlencoded
 
+// Use cookie parser
+app.use(cookieParser())
+
+// Use JWTToken
+app.use(utilities.checkJWTToken)
+
 
 /* ***********************
  * Routes
@@ -59,7 +67,7 @@ app.use(bodyParser.urlencoded({extended: true})) // for parsing application/x-ww
 app.use(static)
 
 // Index route
-app.get("/", utilities.handleErrors(baseController.buildHome))
+app.get("/", utilities.checkJWTToken, utilities.handleErrors(baseController.buildHome))
 
 // Inventory routes
 app.use("/inv", inventoryRoute)

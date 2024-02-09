@@ -1,4 +1,6 @@
 const invModel = require("../models/inventory-model")
+const jwt = require("jsonwebtoken")
+require("dotenv").config()
 const Util = {}
 
 /* ************************
@@ -29,11 +31,11 @@ Util.getNav =async function(req, res, next) {
  ************************** */
 Util.getClassDropdown =async function(req, res, next) {
         let data = await invModel.getClassifications()
-        let dropdown = '<select name="classification_id" id="classification_id">'
+        let dropdown = '<select name="classification_id" id="classificationList">'
         dropdown += '<option value="none" selected disabled hidden>Choose a classification</option>'
         data.rows.forEach((row) => {
-        dropdown += `<option value="${row.classification_id}">${row.classification_name}</option>`
-    })
+            dropdown += `<option value="${row.classification_id}">${row.classification_name}</option>`}
+        )
     dropdown += "</select>"   
     return dropdown
 }
@@ -94,6 +96,58 @@ Util.buildByInventoryId = async function(data) {
     }
     return detail
 }
+
+
+/* ****************************************
+* Middleware to check token validity
+**************************************** */
+Util.checkJWTToken = (req, res, next) => {
+    if (req.cookies.jwt) {
+        jwt.verify(
+            req.cookies.jwt,
+            process.env.ACCESS_TOKEN_SECRET,
+            function (err, accountData) {
+                if (err) {
+                    req.flash("Please log in")
+                    res.clearCookie("jwt")
+                    return res.redirect("account/login")
+                }
+                res.locals.accountData = accountData
+                res.locals.loggedin = 1
+                next()
+            })
+    } else {
+            next()
+    }
+}
+
+/* ****************************************
+ *  Check Login
+ * ************************************ */
+Util.checkLogin = (req, res, next) => {
+    if (res.locals.loggedin) {
+        next()
+    } else {
+        req.flash("notice", "Please log in.")
+        return res.redirect("/account/login")
+    }
+}
+
+
+Util.checkAccountType = (req, res, next) => {
+    if (res.locals.loggedin) {
+        accData = res.cookie("jwt")
+        if (accData.account_type === "Admin")  {
+            next()
+        } else {
+            return res.redirect("/login")
+        }    
+    } else {
+        return res.redirect("/account/login")
+    }
+}
+
+
 
 /* ****************************************
  * Middleware For Handling Errors
