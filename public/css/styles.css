@@ -253,6 +253,12 @@ button {
   padding: 24px;
 }
 
+.form-header {
+  color: white;
+  margin-bottom: 0;
+  padding: 1rem;
+}
+
 span.psw {
   color: var(--accent-color1);
   float: right;
@@ -290,7 +296,6 @@ input:focus:valid {
   color: red;
   padding-left: 1rem;
 }
-
 
 footer {
   padding: .4rem .6rem;

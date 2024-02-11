@@ -13,7 +13,11 @@ router.get("/type/:classificationId", utilities.handleErrors(invController.build
 router.get("/detail/:inventoryId", utilities.handleErrors(invController.buildByInventoryId))
 
 // Route to build inventory management
-router.get("/", utilities.handleErrors(invController.buildInventoryManager)) 
+router.get("/",
+    utilities.checkLogin,
+    utilities.checkAccountType,
+    utilities.handleErrors(invController.buildInventoryManager)
+) 
 
 // Route to build new classification
 router.get("/newclassification", utilities.handleErrors(invController.buildAddClassification))
@@ -44,7 +48,7 @@ router.get("/edit/:inv_id", utilities.handleErrors(invController.buildEditInvent
 // Route to handle incoming inventory update requests 
 router.post("/update/",
     classValidation.newInventoryRules(),
-    classValidation.checkInventoryData,
+    classValidation.checkUpdateData,
     utilities.handleErrors(invController.updateInventory)
 )
 

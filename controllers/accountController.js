@@ -119,8 +119,86 @@ async function buildAccountManagement(req, res)  {
 // Process logout account
 async function accountLogout(req, res) {
     res.clearCookie("jwt"); // Clear the 'jwt' cookie
-    res.redirect("/account"); // Redirect to the login page
+    res.redirect("/"); // Redirect to the login page
 };
 
+/* ***************************
+ *  Build edit account view
+ * ************************** */
+async function buildEditAccount (req, res, next) {
+    const account_id = parseInt(req.params.account_id)
+    let nav = await utilities.getNav()
+    const accData = await accountModel.getAccountById(account_id)
+    const accUserName = `${accData.account_firstname}`
+        res.render("./account/edit-account", {
+        title: `Edit Account: ${accUserName}`,
+        nav,
+        errors: null,
+        account_firstname: accData.account_firstname,
+        account_lastname: accData.account_lastname,
+        account_email: accData.account_email,
+        account_id: accData.account_id,
+    })
+}
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, accountLogout }
+/* ****************************************
+*  Process update account
+* *************************************** */
+async function updateAccount (req, res) {
+    let nav = await utilities.getNav()
+    const {account_firstname, account_lastname, account_email, account_id} = req.body
+
+    const updateResult = await accountModel.updateAccount(
+        account_id,
+        account_firstname,
+        account_lastname,
+        account_email
+    )
+
+    if (updateResult) {
+        const accName = updateResult.account_firstname
+        req.flash("notice", `You have successfully updated your account ${accName}.\n
+            Email: ${updateResult.account_email}\n
+            Lastname: ${updateResult.account_lastname}`)
+        res.redirect("/account")
+    } else {
+        const accName = account_firstname
+        req.flash("notice", "Sorry, information update failed")
+        res.redirect("/account")
+    }
+}
+
+
+/* ****************************************
+*  Process change password
+* *************************************** */
+async function changePassword (req, res) {
+    let nav = await utilities.getNav()
+    const {account_id, account_password} = req.body
+
+    let hashedPassword
+    try {
+        // regular password and cost (salt is generated automatically)
+        hashedPassword = await bcrypt.hashSync(account_password, 10)
+    } catch {
+        req.flash("notice", 'Sorry, there was an error changing password.')
+        res.redirect("/account")
+    }
+
+    const updateResult = await accountModel.changePassword(
+        account_id,
+        hashedPassword
+    )
+
+    if (updateResult) {
+        req.flash("notice", `You have successfully changed your password.`)
+        res.redirect("/account")
+    } else {
+        req.flash("notice", "Sorry, there was an error changing password.")
+        res.redirect("/account")
+    }
+}
+
+
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManagement, accountLogout, buildEditAccount, updateAccount, changePassword }

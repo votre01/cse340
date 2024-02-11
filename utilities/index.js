@@ -6,7 +6,7 @@ const Util = {}
 /* ************************
  * Constructs the nav HTML unordered list
  ************************** */
-Util.getNav =async function(req, res, next) {
+Util.getNav = async function(req, res, next) {
     let data = await invModel.getClassifications()
     let list = "<ul>"
     list += '<li><a href="/" title="Home page">Home</a></li>'
@@ -133,21 +133,17 @@ Util.checkLogin = (req, res, next) => {
     }
 }
 
-
+/* ****************************************
+ *  Check account type of logged in user
+ * ************************************ */
 Util.checkAccountType = (req, res, next) => {
-    if (res.locals.loggedin) {
-        accData = res.cookie("jwt")
-        if (accData.account_type === "Admin")  {
-            next()
-        } else {
-            return res.redirect("/login")
-        }    
+    if (res.locals.accountData.account_type === "Client") {
+        req.flash("notice", "Please log in as admin.")
+        return res.redirect("/account/login")            
     } else {
-        return res.redirect("/account/login")
+        next()        
     }
 }
-
-
 
 /* ****************************************
  * Middleware For Handling Errors
@@ -157,4 +153,3 @@ Util.checkAccountType = (req, res, next) => {
 Util.handleErrors = fn => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
 
 module.exports = Util
-
