@@ -4,7 +4,6 @@ const utilities = require("../utilities")
 const router = new express.Router()
 const invController = require("../controllers/invController")
 const classValidation = require("../utilities/inventory-validation")
-const validateClassification = require("../utilities/inventory-validation")
 
 // Route to build inventory by classification
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId))

@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model")
+const accModel = require("../models/account-model")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const Util = {}
@@ -95,6 +96,47 @@ Util.buildByInventoryId = async function(data) {
         detail += '<p class="notice">Sorry, no matching vehicle could be found.</p>'
     }
     return detail
+}
+
+Util.buildReviewsByInventoryId = async function(data) {
+    let reviewList
+    if (data.length > 0) {
+
+        data.forEach(review => {
+            const accountData = accModel.getAccountById(review.account_id)
+            let screenName = accountData.account_firstname.charAt(0) + accountData.account_lastname
+            reviewList = '<div id="review-display">'            
+            reviewList += `<p>${screenName} `
+            reviewList += new Intl.NumberFormat('en-US').format(review.review_date) + `</p>`  
+            reviewList += `<p>${review.review_text}</p>`
+            reviewList +='</div>'
+       })
+    }
+}
+
+Util.buildReviewsByAccountId =  function(data) {
+    let reviewList
+    if (data.length > 0) {
+        let invName
+        reviewList = '<div id="management-review-display">'
+        reviewList += `<ul> `        
+        data.forEach(review => {
+            
+            let invD = invModel.getDetailByInventoryId(review.inv_id)
+            invD.then(function(result) {
+                invName = result[0].inv_year
+                console.log("the new name " + invName)
+                console.log(result[0])
+                return invName                
+            })
+
+            console.log("the later name " + invName)
+            reviewList += `<li>Reviewed ${invName} ${review.review_date}<p>${review.review_text}</p></li>`    
+       })
+       reviewList +='</ul>'
+       reviewList +='</div>'
+    }
+    return reviewList
 }
 
 

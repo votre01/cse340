@@ -1,4 +1,6 @@
 const invModel = require("../models/inventory-model")
+const reviewModel = require("../models/review-model")
+const accModel = require("../models/account-model")
 const utilities = require("../utilities")
 const invCont = {}
 
@@ -24,12 +26,17 @@ invCont.buildByClassificationId = async function(req, res, next) {
 invCont.buildByInventoryId = async function(req, res, next) {
     const inv_id = req.params.inventoryId
     const data = await invModel.getDetailByInventoryId(inv_id)
+    const reviewData = await reviewModel.getReviewsByInventoryId(inv_id)
     const detail = await utilities.buildByInventoryId(data)
+    const reviews = await utilities.buildReviewsByInventoryId(reviewData)   
     let nav = await utilities.getNav()
+
     const vehicleName = data[0].inv_year + " " + data[0].inv_make + " " + data[0].inv_model 
     res.render("./inventory/vehicle", {
         title: vehicleName,
+        inv_id,
         nav,
+        reviews,
         detail,
     })
 }
@@ -242,7 +249,7 @@ invCont.updateInventory = async function(req, res) {
 *  Deliver delete inventory view
 * *************************************** */
 invCont.buildDeleteInventoryItem = async function(req, res, next) {
-    const inv_id = parseInt(req.params.inv_id)
+    const inv_id = parseInt(req.params.inv_id)    
     let nav = await utilities.getNav()
     const invData = await invModel.getDetailByInventoryId(inv_id)
     const invItemData = invData[0];
@@ -255,7 +262,7 @@ invCont.buildDeleteInventoryItem = async function(req, res, next) {
         inv_make: invItemData.inv_make,
         inv_model: invItemData.inv_model,
         inv_price: invItemData.inv_price,
-        inv_year: invItemData.inv_year
+        inv_year: invItemData.inv_year,
     })    
 }
 
