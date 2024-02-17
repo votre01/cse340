@@ -1,5 +1,6 @@
 const utilities = require("../utilities")
 const accountModel = require("../models/account-model")
+const invModel = require("../models/inventory-model")
 const reviewModel = require("../models/review-model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
@@ -108,12 +109,11 @@ async function accountLogin(req, res) {
 
 async function buildAccountManagement(req, res)  {
     let nav = await utilities.getNav()
-    const {account_id} = 12
+    const account_id = res.locals.accountData.account_id
     console.log("account id " + account_id)
-    const reviewData = await reviewModel.getReviewsByAccountId(12)
-    console.log(reviewData[0])
-    const reviews = await utilities.buildReviewsByAccountId(reviewData)
-    console.log(reviews)
+    const reviewData = await reviewModel.getReviewsByAccountId(account_id)
+    const invData = await invModel.getInventory()
+    const reviews = await utilities.buildReviewsByAccountId(reviewData, invData)
     req.flash("Login success")
     res.render("account/account-management", {
         title: "Account",

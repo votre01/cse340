@@ -1,6 +1,6 @@
 const invModel = require("../models/inventory-model")
-const reviewModel = require("../models/review-model")
 const accModel = require("../models/account-model")
+const reviewModel = require("../models/review-model")
 const utilities = require("../utilities")
 const invCont = {}
 
@@ -20,16 +20,22 @@ invCont.buildByClassificationId = async function(req, res, next) {
     })
 }
 
+invCont.getScreenName = async function (account) {
+    let accData = await accModel.getAccountById(account_id)
+    let accName = accData.account_firstname.charAt(0) + accData.account_lastname
+    return accName
+}
+
 /* ***************************
  *  Build detail by inventory view
  * ************************** */
 invCont.buildByInventoryId = async function(req, res, next) {
     const inv_id = req.params.inventoryId
+    let nav = await utilities.getNav()
     const data = await invModel.getDetailByInventoryId(inv_id)
     const reviewData = await reviewModel.getReviewsByInventoryId(inv_id)
     const detail = await utilities.buildByInventoryId(data)
-    const reviews = await utilities.buildReviewsByInventoryId(reviewData)   
-    let nav = await utilities.getNav()
+    const reviews = await utilities.buildReviewsByInventoryId(reviewData)
 
     const vehicleName = data[0].inv_year + " " + data[0].inv_make + " " + data[0].inv_model 
     res.render("./inventory/vehicle", {

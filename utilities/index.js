@@ -99,42 +99,42 @@ Util.buildByInventoryId = async function(data) {
 }
 
 Util.buildReviewsByInventoryId = async function(data) {
-    let reviewList
+    let invReviews
+    let screenName
+    let accData
     if (data.length > 0) {
+        invReviews = "<ul>"
 
-        data.forEach(review => {
-            const accountData = accModel.getAccountById(review.account_id)
-            let screenName = accountData.account_firstname.charAt(0) + accountData.account_lastname
-            reviewList = '<div id="review-display">'            
-            reviewList += `<p>${screenName} `
-            reviewList += new Intl.NumberFormat('en-US').format(review.review_date) + `</p>`  
-            reviewList += `<p>${review.review_text}</p>`
-            reviewList +='</div>'
-       })
-    }
+        for (let i = data.length-1; i >= 0; i--) {
+            accData = await accModel.getAccountById(data[i].account_id)
+            screenName = accData.account_firstname.charAt(0) + accData.account_lastname           
+            invReviews += '<li id="review-display">'            
+            invReviews += `<p class="review-info">${screenName} wrote on ${data[i].review_date.toLocaleString()}</p>`  
+            invReviews += `<p>${data[i].review_text}</p>`
+            invReviews += "</li>"            
+       }
+       invReviews += "</ul>"       
+    }    
+    return invReviews
 }
 
-Util.buildReviewsByAccountId =  function(data) {
-    let reviewList
-    if (data.length > 0) {
-        let invName
+Util.buildReviewsByAccountId = async function(reviewData, invData) {
+    let reviewList  
+    if (reviewData.length > 0) {
+        let invItem, invName        
         reviewList = '<div id="management-review-display">'
-        reviewList += `<ul> `        
-        data.forEach(review => {
-            
-            let invD = invModel.getDetailByInventoryId(review.inv_id)
-            invD.then(function(result) {
-                invName = result[0].inv_year
-                console.log("the new name " + invName)
-                console.log(result[0])
-                return invName                
+        reviewList += `<ul>`        
+        reviewData.forEach(review => {
+            invData.forEach(item => {
+                if (item.inv_id == review.inv_id) {invItem = item}
             })
-
-            console.log("the later name " + invName)
-            reviewList += `<li>Reviewed ${invName} ${review.review_date}<p>${review.review_text}</p></li>`    
+            // new Intl.Locale('en-US').format
+            invName = `${invItem.inv_year} ${invItem.inv_model} ${invItem.inv_make}`   
+            reviewList += `<li>Reviewed ${invName} ${review.review_date.toLocaleString()} | <a href="/review/edit/${review.review_id}">Edit</a> | <a href="/review/delete/${review.review_id}">Delete</a></li>`    
        })
        reviewList +='</ul>'
        reviewList +='</div>'
+       
     }
     return reviewList
 }

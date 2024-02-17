@@ -216,22 +216,35 @@ main ul {
 }
 
 /****** Account form **********/ 
-form {
+form .account-form {
   border: 2px solid var(--primary-color);
   border-radius: .2rem;
   background-color: var(--primary-color);
+}
+
+form .review-form {
+  border: 1px solid var(--primary-color);
+  border-radius: .2rem;
+  padding: 1rem;
+  color: var(--primary-color)
 }
 
 label {
   color: var(--accent-color1);
 }
 
+form .review-form label {
+  color: var(--primary-color)
+}
+
+
+
 input[type=email], input[type=text], input[type=password], input[type=number], textarea, select {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
-  border: none;
+  border: 1px solid var(--primary-color);
   border-radius: .2rem;
   box-sizing: border-box;
   font-size: 1rem;
@@ -295,6 +308,10 @@ input:focus:valid {
 .notice {
   color: red;
   padding-left: 1rem;
+}
+
+.review-info {
+  border-bottom: 2px solid black;
 }
 
 footer {
